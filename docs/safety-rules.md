@@ -3,6 +3,14 @@
 Assemblywright is designed for high autonomy with explicit boundaries. These rules are
 release requirements, not optional UX guidance.
 
+The owner explicitly relaxed these production requirements on 2026-09-05 to obtain
+a working end-to-end developer build first. The selected exception is documented in
+[`developer-build.md`](developer-build.md): supervised execution under existing owner
+accounts, local model-generated file changes, and owner-selected validation commands.
+That build keeps durable checkpoints and truthful control/results reporting; VM,
+service-SID, and signing prerequisites do not gate it. The production rules below
+continue to govern claims about the protected production runtime.
+
 ## Policy Defaults
 
 - One authenticated owner holds all authority. Models and workers may propose,

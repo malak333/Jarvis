@@ -14,6 +14,10 @@ name = "assemblywright-master"
 path = "src/main.rs"
 
 [[bin]]
+name = "assemblywright-developer"
+path = "src/developer_main.rs"
+
+[[bin]]
 name = "assemblywright-review-provider"
 path = "src/review_provider_adapter.rs"
 
@@ -42,6 +46,7 @@ rustls.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 sha2.workspace = true
+tempfile.workspace = true
 thiserror.workspace = true
 time.workspace = true
 tokio.workspace = true
@@ -69,6 +74,3 @@ windows-sys = { workspace = true, features = [
   "Win32_UI_Shell",
 ] }
 windows-service.workspace = true
-
-[dev-dependencies]
-tempfile.workspace = true

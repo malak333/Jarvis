@@ -2,6 +2,23 @@
 
 > Orchestrated intelligence. Verified software.
 
+## Working developer build
+
+The owner-selected supervised build connects the Mac app to a Windows queue runner
+and the existing local Qwen model. Enter a project folder, describe a feature, choose
+a validation command, and use **Add to queue → Start**. Stop, Emergency Pause,
+checkpointed Resume, and auto-run operate on real Windows processes and saved files.
+
+With the Windows SSH session available, run:
+
+```sh
+./scripts/developer-build.py --build
+```
+
+Later launches use `./scripts/developer-build.py`. See
+[`docs/developer-build.md`](docs/developer-build.md) for setup, native tests, and
+the distinction between this developer build and the production target below.
+
 Assemblywright is an owner-controlled developer-agent system. A Windows master
 holds durable authority over an owner-approved feature queue; restricted local
 coding agents implement one feature at a time against credential-free

@@ -5,30 +5,47 @@ import UniformTypeIdentifiers
 
 @main
 struct AssemblywrightMacApp: App {
-    @StateObject private var developerBridge: AssemblywrightDeveloperBridgeProcessLifecycle
+  private let developerConfigurationPath =
+    ProcessInfo.processInfo.environment["ASSEMBLYWRIGHT_DEVELOPER_CONFIG"]
+    ?? ((Bundle.main.object(forInfoDictionaryKey: "AssemblywrightDeveloperBuild") as? Bool == true)
+      ? FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent(
+        "Library/Application Support/Assemblywright/Developer/runtime.json"
+      ).path : nil)
+  @StateObject private var developerBridge: AssemblywrightDeveloperBridgeProcessLifecycle
 
-    init() {
-        _developerBridge = StateObject(wrappedValue: AssemblywrightDeveloperBridgeProcessLifecycle())
+  init() {
+    _developerBridge = StateObject(wrappedValue: AssemblywrightDeveloperBridgeProcessLifecycle())
+  }
+
+  var body: some Scene {
+    WindowGroup("Assemblywright", id: AssemblywrightMenuBarContract.mainWindowID) {
+      if let developerConfigurationPath {
+        DeveloperRunnerView(configurationPath: developerConfigurationPath)
+          .background(AppActivationView())
+      } else {
+        AssemblywrightShellView(developerBridge: developerBridge)
+          .background(AppActivationView())
+          .task { await developerBridge.superviseUntilCancelled() }
+      }
     }
 
-    var body: some Scene {
-        WindowGroup("Assemblywright", id: AssemblywrightMenuBarContract.mainWindowID) {
-            AssemblywrightShellView(developerBridge: developerBridge)
-                .background(AppActivationView())
-                .task {
-                    await developerBridge.superviseUntilCancelled()
-                }
-        }
-
-        MenuBarExtra {
-            AssemblywrightMenuBarView(developerBridge: developerBridge)
-        } label: {
-            AssemblywrightMenuBarLabel(
-                presentation: AssemblywrightMenuBarPresentation(status: developerBridge.status)
-            )
-        }
-        .menuBarExtraStyle(.menu)
+    MenuBarExtra {
+      if developerConfigurationPath == nil {
+        AssemblywrightMenuBarView(developerBridge: developerBridge)
+      } else {
+        Text("Assemblywright developer build")
+      }
+    } label: {
+      if developerConfigurationPath == nil {
+        AssemblywrightMenuBarLabel(
+          presentation: AssemblywrightMenuBarPresentation(status: developerBridge.status)
+        )
+      } else {
+        Image(systemName: "hammer")
+      }
     }
+    .menuBarExtraStyle(.menu)
+  }
 }
 
 private struct AppActivationView: NSViewRepresentable {
