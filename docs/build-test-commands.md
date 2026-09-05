@@ -1444,3 +1444,25 @@ independent-review, and publication checklist in
 [`development-agent-workflow.md`](development-agent-workflow.md#feature-and-phase-closeout).
 Production adapter execution, active-effect recovery, installed policy binding,
 signed service cutover, and owner UI proof remain separate uncompleted milestones.
+
+
+## Supervised developer build
+
+The supervised owner-account developer build has its own Windows state and native
+coverage. It does not activate the protected production dispatcher.
+
+```sh
+cargo test -p assemblywright-master --bin assemblywright-developer
+cargo build -p assemblywright-master --bin assemblywright-developer
+python3 scripts/developer-runner-e2e.py --binary target/debug/assemblywright-developer
+swift test --disable-sandbox --package-path apps/mac --filter DeveloperRunnerClientTests
+./scripts/developer-build.py --build
+```
+
+The native fixture-model HTTP/process E2E is invoked by the master package
+integration test `developer_workflow_e2e`. Both the canonical local release gate
+and the required Windows distributed gate run it through their existing Cargo
+test commands, with `python3` on Mac and `python` on Windows. Swift client tests run with the full Swift package. Use
+`docs/developer-build-testing.md` for the scenario matrix, limitations, and
+closeout evidence; `docs/developer-build.md` describes owner use and the separate
+live local-model demonstration.

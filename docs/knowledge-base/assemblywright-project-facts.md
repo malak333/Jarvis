@@ -2379,3 +2379,48 @@ Full-machine target phase: planning/creation containment has bounded native Wind
   surface or line-coverage percentage is claimed. Repeat the repository's
   per-phase closeout checklist for subsequent features, and verify protected
   hosted checks on the current publication SHA before claiming GitHub closeout.
+
+## Supervised developer phase and closeout
+
+- The owner selected a working end-to-end developer build on 2026-09-05 and
+  deferred production containment/signing requirements. `assemblywright-developer`
+  retains Windows queue/checkpoint authority in a separate SQLite database while
+  the Mac app uses SSH-forwarded loopback HTTP and the existing local Qwen model.
+  The accepted scope is in `docs/developer-build.md`; it does not change the
+  installed production service or claim its capability gate is available.
+- Native Windows validation needs a correctly quoted `cmd.exe /d /s /c` command
+  tail. Ordinary argv escaping changes embedded Python quotes. File durability
+  requires a write-capable handle. Generate into a synced sibling temporary file
+  before replacing an existing project file so interrupted writes preserve it.
+- Compare generated edits against the content supplied to the model, not a fresh
+  digest captured after generation: an owner may edit a file during that request.
+  Existing files omitted by the bounded context must not be overwritten unseen.
+- Start binds the current queue frontier. Features enqueued while it runs require
+  a later Start/Resume even when auto-run is on. Successful validation advances
+  only within that approved batch; failed validation preserves the applied
+  checkpoint and blocks later work until a successful explicit retry.
+- `kill_on_drop` cannot clean up validation after the runner itself is killed.
+  The Windows developer runner creates the command suspended, assigns a
+  kill-on-close Job, and resumes only afterward. Stop and normal completion verify
+  the Job is empty before advancing. Native tests kill the runner while both a
+  validation parent and descendant exist, then verify checkpointed restart.
+  Windows `cmd.exe` also needs canonical local `\\?\C:\` working directories
+  normalized to drive paths; this developer launcher does not use UNC workspaces.
+- Unit coverage and native E2E coverage serve different boundaries. Use Rust
+  state/file tests, deterministic Swift URLSession tests, and disposable native
+  HTTP/process tests on both Mac and Windows. The fixture-model tests do not
+  establish model quality; the live local-Qwen demonstration is separate evidence.
+- The owner requires documentation/design compliance, reusable knowledge-base
+  updates, the unit-testing-test-generate and e2e-testing workflows, and verified
+  GitHub publication at each requested feature/phase closeout. The durable
+  checklist remains `docs/development-agent-workflow.md`. Preserve unfinished
+  drafts in their checkout when publishing an independently complete phase.
+
+- A cancelled validation does not prove termination. Spawn cleanup, polling, and
+  log-inspection failures must still confirm process-tree cleanup; uncertainty
+  latches Emergency rather than reporting a successfully paused feature. If SQLite
+  rejects an emergency write, retain the volatile latch and reject Start until a
+  successful explicit clear. Report the failed write, not a durable acknowledgement.
+- A local-model developer mode must validate `--model-url` as loopback before
+  collecting project context. Accepting an arbitrary URL contradicts that mode even
+  if the control server itself is loopback-only.

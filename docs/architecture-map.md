@@ -660,3 +660,14 @@ frames, and result acceptance bound to the exact leased attempt.
 The full accepted authority, security, routing, recovery, and rollout target is
 kept in `docs/distributed-developer-mode-design.md`, and the Feature Conveyor
 target is in `docs/feature-conveyor-design.md`.
+
+
+## Supervised developer build
+
+The owner-selected developer exception is implemented by
+`crates/assemblywright-master/src/developer_main.rs`, with separate Windows SQLite
+queue/checkpoint state, local-model file generation, and owner-command validation.
+`DeveloperRunnerView.swift` is the native Mac control/observation surface;
+`scripts/developer-build.py` builds and reconnects it through the existing SSH
+session. This phase leaves production schema, service, and effect admission
+unchanged. See `docs/developer-build.md` and `docs/developer-build-testing.md`.

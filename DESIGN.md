@@ -1,5 +1,12 @@
 # Assemblywright Design
 
+The owner's 2026-09-05 instruction prioritizes a working supervised developer build
+and defers security hardening. [`docs/developer-build.md`](docs/developer-build.md)
+owns that explicitly selected scope: a Windows master-package runner retains the
+queue and checkpoints, uses the local model, and executes owner-selected validation
+commands under the existing Windows account. It is separate from the protected
+production runtime described below and does not manufacture its readiness evidence.
+
 This document is the system-level design. Two documents own the detailed
 accepted designs and take precedence within their scope:
 
